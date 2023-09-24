@@ -7,7 +7,3 @@ services:
       MYSQL_DATABASE: defaultdb
     ports:
       - "3306:3306"
-  adminer:
-    image: adminer
-    ports:
-      - "8080:8080"

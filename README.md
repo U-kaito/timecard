@@ -28,3 +28,7 @@ src
 
 ログイン機能
 ・firebase
+
+DB
+・users
+・timestamp
