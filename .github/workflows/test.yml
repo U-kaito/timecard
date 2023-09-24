@@ -1,0 +1,23 @@
+on: [push, pull_request]
+
+env:
+  NEXT_PUBLIC_BASE_URL: 'http://localhost:3000'
+  DATABASE_URL: 'mysql://root:password@127.0.0.1:3306/defaultdb'
+  ENV: 'dev'
+  TZ: 'Asia/Tokyo'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js 20.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20.x
+      - run: docker compose up -d
+      - run: npm install -g yarn
+      - run: yarn install
+      - run: yarn prisma migrate dev
+      - run: yarn test
+      - run: yarn run build
