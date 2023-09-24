@@ -14,3 +14,17 @@ $docker compose up -d
 
 サーバー起動
 $yarn dev
+
+ページ構成
+src
+-pages
+-login
+-sign-up
+-timestamp
+-works
+
+インフラ
+・AWS
+
+ログイン機能
+・firebase
