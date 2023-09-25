@@ -6,6 +6,31 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mysql"
   url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int        @id @default(autoincrement())
+  email     String     @unique
+  firstName String     @map("first_name")
+  lastName  String     @map("last_name")
+  owner     Boolean    @default(false)
+  createdAt DateTime   @default(now()) @map("created_at")
+  updatedAt DateTime   @updatedAt @map("updated_at")
+  WorkTime  WorkTime[]
+
+  @@map("users")
+}
+
+model WorkTime {
+  id        Int      @id @default(autoincrement())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    Int      @map("user_id")
+  clockIn   DateTime @map("clock_in")
+  clockOut  DateTime @map("clock_out")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("work_time")
 }
