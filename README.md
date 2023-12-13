@@ -1,34 +1,19 @@
 勤怠管理システム
 
-使用言語
-・Typescript
-
-フロントエンド
-・React
-
-バックエンド
-・Nextjs
-
 ローカル DB 作成
 $docker compose up -d
+DB接続情報
+DATABASE_URL=mysql://root:password@127.0.0.1:3306/defaultdb
 
 サーバー起動
 $yarn dev
 
-ページ構成
-src
--pages
--login
--sign-up
--timestamp
--works
+フォーマット
+$yarn fmt
 
-インフラ
-・AWS
+テスト
+$yarn test
 
-ログイン機能
-・firebase
-
-DB
-・users
-・timestamp
+migrationファイル作成方法
+yarn prisma migrate dev
+yarn prisma generate
