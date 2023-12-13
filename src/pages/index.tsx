@@ -1,5 +1,5 @@
 import { ReactElement } from "react";
-import { DashboardLayout } from "@/client/layout/dashboard-layout";
+import { DashboardLayout } from "@/client/layout/common-layout";
 import { TimestampPage } from "@/client/timestamp/timestamp-page";
 
 export default function SignUp(): JSX.Element {

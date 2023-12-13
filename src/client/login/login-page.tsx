@@ -4,7 +4,7 @@ import { useLogin } from "@/client/login/login-hook";
 import { useRouter } from "next/router";
 import { css } from "@emotion/react";
 import { useSession } from "@/client/session/session-hook";
-
+import { FloatLayout } from "@/client/layout/float-layout";
 export function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -46,12 +46,13 @@ export function LoginPage() {
   );
 }
 
+LoginPage.Layout = FloatLayout;
+
 function loginPageStyles(error: boolean) {
   return css`
     background-color:;
     filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.2));
     width: 350px;
-    margin: auto;
     border-radius: 10px;
     padding: 40px;
     display: flex;

@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { useConfirm } from "@/client/confirm/confirm-hook";
 import { useRouter } from "next/router";
 import { css } from "@emotion/react";
+import { FloatLayout } from "@/client/layout/float-layout";
 
 export function ConfirmPage({
   key,
@@ -46,12 +47,13 @@ export function ConfirmPage({
   );
 }
 
+ConfirmPage.Layout = FloatLayout;
+
 function confirmPageStyles() {
   return css`
     background-color:;
     filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.2));
     width: 350px;
-    margin: auto;
     border-radius: 10px;
     padding: 40px;
     display: flex;

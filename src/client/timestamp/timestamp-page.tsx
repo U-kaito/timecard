@@ -5,13 +5,7 @@ import { useSession } from "@/client/session/session-hook";
 import { deleteCookie } from "cookies-next";
 
 export function TimestampPage() {
-  const router = useRouter();
-  const { session, loading, refresh } = useSession();
-  const logout = useCallback(() => {
-    deleteCookie("_token");
-    refresh();
-    router.push("/login");
-  }, [refresh, router]);
+  const { loading, session } = useSession();
   return (
     <div css={TimestampPageStyles}>
       <div className="name">
@@ -21,9 +15,6 @@ export function TimestampPage() {
         <button className="attendance-button green">出勤</button>
         <button className="attendance-button red">退勤</button>
       </div>
-      <button className="LayoutNav-Logout" onClick={logout}>
-        ログアウト
-      </button>
     </div>
   );
 }

@@ -13,7 +13,7 @@ export async function getServerSession(
   const accessToken = new CognitoAccessToken({ AccessToken: token });
   //username取り出してDBと連携
   const user = await prisma.user.findUnique({
-    awsName: accessToken.payload.username,
+    where: { awsName: accessToken.payload.username },
   });
   if (!user) {
     throw new Error(`Invalid session`);
