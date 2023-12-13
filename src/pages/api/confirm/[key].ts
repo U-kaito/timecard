@@ -36,6 +36,7 @@ async function postConfirm(req: NextApiRequest, res: NextApiResponse, key: strin
         firstName: pendingUser.firstName,
         lastName: pendingUser.lastName,
         email: pendingUser.email,
+        awsName: 
     },
   })
 

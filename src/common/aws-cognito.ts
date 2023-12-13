@@ -1,4 +1,4 @@
-import { CognitoUserPool, CognitoUser, AuthenticationDetails } from 'amazon-cognito-identity-js';
+import { CognitoUserPool, CognitoUser, AuthenticationDetails, CognitoAccessToken } from 'amazon-cognito-identity-js';
 
 const poolData = {
     UserPoolId: process.env.AWS_USER_POOL_ID as string,
@@ -16,6 +16,7 @@ export async function signUp(username: string, password: string, ){
             console.log(err)
           return;
         } else {
+            console.log(result)
           alert(
             "登録したメールアドレスへアクティベーション用のリンクを送付しました。"
           );
@@ -53,36 +54,16 @@ export async function login(username: string, password: string) {
     };
 
     const cognitoUser = new CognitoUser(userData);
-
     await cognitoUser.authenticateUser(authenticationDetails, {
-        onSuccess: () => {
+        onSuccess: (session) => {
         console.log('ログイン成功');
+        //アクセストークンを返すようにする
+        return session.getAccessToken().getJwtToken();
         },
         onFailure: (err) => {
         console.error('ログイン失敗', err);
         }
     });
-}
-
-export async function getSession() {
-    const cognitoUser = await getUserPool().getCurrentUser();
-
-    if (cognitoUser) {
-        await cognitoUser.getSession((err, session) => {
-        if (err) {
-            console.error('セッションの取得に失敗', err);
-            return;
-        }
-        
-        if (session.isValid()) {
-            console.log('セッションは有効です', session);
-        } else {
-            console.log('セッションは無効です');
-        }
-        });
-    } else {
-        console.log('ユーザーがログインしていません');
-    }
 }
 
 export async function logout() {

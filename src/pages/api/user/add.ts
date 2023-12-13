@@ -3,14 +3,20 @@ import { AddUserSchema } from "@/common/user-schema"
 import { prisma } from "@/common/prisma"
 import { withErrorHandler } from "@/server/error-handler"
 import { signUp } from "@/common/aws-cognito"
+import { getServerSession } from "@/server/server-session"
 
 export default withErrorHandler(async (req, res) => {
+    const session = await getServerSession(req, true)
+    if (!session) {
+        res.status(401).json({ message: "Unauthorized" })
+        return
+    }
   if (req.method === "POST") {
     await addUser(req, res)
-  } else {
+    } else {
     res.status(405).json({ message: "Method Not Allowed" })
     return
-  }
+    }
 })
 
 export async function addUser(req: NextApiRequest, res: NextApiResponse) {
@@ -26,6 +32,8 @@ export async function addUser(req: NextApiRequest, res: NextApiResponse) {
       email: result.data.email,
       firstName: result.data.firstName,
       lastName: result.data.lastName,
+      awsName: ,
+      owner: result.data.owner,
       expiredAt: new Date(Date.now() + 1000 * 60 * 60 * 24),
     }
   })

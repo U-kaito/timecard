@@ -3,26 +3,21 @@ import { useEffect, useState } from "react"
 import { useLogin } from "@/client/login/login-hook"
 import { useRouter } from "next/router"
 import { css } from "@emotion/react"
-// import { useSession } from "@/client/session/session-hook"
+import { useSession } from "@/client/session/session-hook"
 
 export function LoginPage() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const { success, error, loading, login } = useLogin()
   const router = useRouter()
-//   const { refresh } = useSession()
+  const { refresh } = useSession()
 
-//   useEffect(() => {
-//     if (success) {
-//       refresh()
-//       router.push("/")
-//     }
-//   }, [refresh, router, success])
   useEffect(() => {
     if (success) {
+      refresh()
       router.push("/")
     }
-  }, [router, success])
+  }, [refresh, router, success])
 
   return (
     <form onSubmit={(e) => e.preventDefault()} css={loginPageStyles(error)}>
