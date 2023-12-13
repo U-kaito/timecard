@@ -1,14 +1,14 @@
-import { LoginSchema } from "@/common/login-schema"
-import { useMutation } from "@tanstack/react-query"
-import { z } from "zod"
-import { useMemo } from "react"
+import { LoginSchema } from "@/common/login-schema";
+import { useMutation } from "@tanstack/react-query";
+import { z } from "zod";
+import { useMemo } from "react";
 
 export interface LoginHook {
-  login(email: string, password: string): void
+  login(email: string, password: string): void;
 
-  loading: boolean
-  success: boolean
-  error: boolean
+  loading: boolean;
+  success: boolean;
+  error: boolean;
 }
 
 export function useLogin(): LoginHook {
@@ -19,24 +19,26 @@ export function useLogin(): LoginHook {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email, password } satisfies z.input<typeof LoginSchema>),
-      })
+        body: JSON.stringify({ email, password } satisfies z.input<
+          typeof LoginSchema
+        >),
+      });
 
       if (!response.ok) {
-        throw new Error("Login failed")
+        throw new Error("Login failed");
       }
-    }
-  )
+    },
+  );
 
   return useMemo(
     () => ({
       login(email, password) {
-        mutate({ email, password })
+        mutate({ email, password });
       },
       loading: isLoading,
       success: isSuccess,
       error: isError,
     }),
-    [isError, isLoading, isSuccess, mutate]
-  )
+    [isError, isLoading, isSuccess, mutate],
+  );
 }

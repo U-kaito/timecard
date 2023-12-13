@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "next lint",
     "migrate:dev": "npx prisma migrate dev",
-    "test": "jest"
+    "test": "jest",
+    "fmt": "prettier --write ."
   },
   "dependencies": {
     "@emotion/react": "^11.11.1",
@@ -25,6 +26,7 @@
     "eslint": "8.50.0",
     "eslint-config-next": "13.5.2",
     "next": "13.5.2",
+    "prettier": "^3.1.1",
     "prisma": "^5.3.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",

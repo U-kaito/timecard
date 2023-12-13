@@ -41,6 +41,5 @@ async function postConfirm(req: NextApiRequest, res: NextApiResponse, key: strin
   })
 
   await confirm(pendingUser.email, result.data.confirmCode)
-  //セッションとかなんかしないとダメかも
-    res.status(200).json("OK")
+  res.status(200).json("OK")
 }
