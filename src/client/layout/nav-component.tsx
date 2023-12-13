@@ -35,7 +35,7 @@ export function LayoutNav({ items }: { items: NavItem[] }) {
         <>
           <div>
             {items
-              //   .filter((item) => (!item.ownerOnly || session.owner))
+              .filter((item) => !item.ownerOnly || session.owner)
               .map((item) => (
                 <Link
                   key={item.title}

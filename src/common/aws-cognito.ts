@@ -3,6 +3,7 @@ import {
   CognitoUser,
   AuthenticationDetails,
   CognitoUserSession,
+  CognitoUserAttribute,
 } from "amazon-cognito-identity-js";
 
 const poolData = {
@@ -14,19 +15,38 @@ function getUserPool() {
   return new CognitoUserPool(poolData);
 }
 
-export async function signUp(username: string, password: string) {
-  //todo:名前とロールの設定を行う
-  await getUserPool().signUp(username, password, [], [], (err, result) => {
-    if (err) {
-      console.log(err);
-      return;
-    } else {
-      console.log(result);
-      alert(
-        "登録したメールアドレスへアクティベーション用のリンクを送付しました。",
-      );
-    }
+function getAttribute(name: string, value: string) {
+  return new CognitoUserAttribute({
+    Name: name,
+    Value: value,
   });
+}
+export async function signUp(
+  username: string,
+  password: string,
+  name: string,
+  owner: boolean,
+) {
+  const userAttributes = [];
+  userAttributes.push(getAttribute("custom:name", name));
+  userAttributes.push(getAttribute("custome:owner", owner.toString()));
+  await getUserPool().signUp(
+    username,
+    password,
+    userAttributes,
+    [],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+        return;
+      } else {
+        console.log(result);
+        alert(
+          "登録したメールアドレスへアクティベーション用のリンクを送付しました。",
+        );
+      }
+    },
+  );
 }
 
 export async function confirm(username: string, confirmCode: string) {
@@ -72,8 +92,9 @@ export async function login(username: string, password: string) {
     });
 
     console.log("ログイン成功");
-    // アクセストークンを返す
-    return session.getAccessToken().getJwtToken();
+    // トークンを返す
+    console.log(session.getIdToken().payload['custom:owner']);
+    return session.getIdToken().getJwtToken();
   } catch (error) {
     console.error("ログイン失敗", error);
     return undefined;

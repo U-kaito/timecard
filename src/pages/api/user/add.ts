@@ -26,7 +26,12 @@ export async function addUser(req: NextApiRequest, res: NextApiResponse) {
     return;
   }
 
-  await signUp(result.data.email, result.data.password);
+  await signUp(
+    result.data.email,
+    result.data.password,
+    `${result.data.lastName}${result.data.firstName}`,
+    result.data.owner,
+  );
   await prisma.pendingUser.create({
     data: {
       email: result.data.email,

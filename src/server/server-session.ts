@@ -1,5 +1,5 @@
-import { prisma } from "@/common/prisma";
-import { CognitoAccessToken } from "amazon-cognito-identity-js";
+import { CognitoIdToken } from "amazon-cognito-identity-js";
+import { Session } from "@/common/session";
 
 export async function getServerSession(
   req: { cookies: Partial<{ [key: string]: string }> },
@@ -10,19 +10,21 @@ export async function getServerSession(
     return null;
   }
 
-  const accessToken = new CognitoAccessToken({ AccessToken: token });
-  //username取り出してDBと連携
-  const user = await prisma.user.findUnique({
-    where: { awsName: accessToken.payload.username },
-  });
-  if (!user) {
+  let idToken = null;
+  try {
+    idToken = new CognitoIdToken({ IdToken: token });
+  } catch (e) {
+    return null;
+  }
+  if (!idToken) {
     throw new Error(`Invalid session`);
   }
   const data = {
-    id: user.id,
-    name: user.lastName,
-    owner: user.owner,
-  };
+    email: idToken.payload.email,
+    name: idToken.payload["custome:name"],
+    owner: idToken.payload["custome:owner"],
+    exp: idToken.payload.exp,
+  } as Session;
   if (ownerOnly && !data.owner) return null;
 
   return data;

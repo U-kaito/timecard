@@ -14,7 +14,6 @@ model User {
   lastName  String   @map("last_name")
   disabled  Boolean  @default(false)
   owner     Boolean  @default(false)
-  awsName   String   @unique @map("aws_name")
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 

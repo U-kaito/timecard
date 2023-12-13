@@ -8,7 +8,7 @@ import {
 } from "react";
 import { useRouter } from "next/router";
 import { getCookie } from "cookies-next";
-import { CognitoAccessToken } from "amazon-cognito-identity-js";
+import { CognitoIdToken } from "amazon-cognito-identity-js";
 import { Session } from "@/common/session";
 
 interface SessionState {
@@ -43,9 +43,22 @@ export function SessionProvider({
       setState({ loading: false, session: null, refresh });
       return;
     }
-    //sessionを保存
-    const accessToken = new CognitoAccessToken({ AccessToken: token });
-    const payload = accessToken.payload as Session;
+    let idToken = null;
+    try {
+      idToken = new CognitoIdToken({ IdToken: token });
+    } catch (e) {
+      return null;
+    }
+    if (!idToken) {
+      setState({ loading: false, session: null, refresh });
+      return;
+    }
+    const payload = {
+      email: idToken.payload.email,
+      name: idToken.payload['custom:name'],
+      owner: idToken.payload['custom:owner'],
+      exp: idToken.payload.exp,
+    };
     setState({ loading: false, session: payload, refresh });
   }, []);
 

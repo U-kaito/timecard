@@ -9,7 +9,7 @@ export function TimestampPage() {
   return (
     <div css={TimestampPageStyles}>
       <div className="name">
-        {loading ? <p>ようこそ</p> : <p>ようこそ {session?.username} 様</p>}
+        {loading ? <p>ようこそ</p> : <p>ようこそ {session?.name}様</p>}
       </div>
       <div className="button-container">
         <button className="attendance-button green">出勤</button>

@@ -13,7 +13,7 @@ export interface ConfirmHook {
 export function useConfirm(key: string): ConfirmHook {
   const { mutate, isLoading, isSuccess } = useMutation(
     async ({ confirmCode }: { confirmCode: string }) => {
-      const response = await fetch(`/api/verify/${key}`, {
+      const response = await fetch(`/api/confirm/${key}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -24,7 +24,7 @@ export function useConfirm(key: string): ConfirmHook {
       });
 
       if (!response.ok) {
-        throw new Error("Failed to verify");
+        throw new Error("Failed to confirm");
       }
     },
   );
