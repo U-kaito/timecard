@@ -93,7 +93,7 @@ export async function login(username: string, password: string) {
 
     console.log("ログイン成功");
     // トークンを返す
-    console.log(session.getIdToken().payload['custom:owner']);
+    console.log(session.getIdToken().payload["custom:owner"]);
     return session.getIdToken().getJwtToken();
   } catch (error) {
     console.error("ログイン失敗", error);

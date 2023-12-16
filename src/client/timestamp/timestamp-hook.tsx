@@ -1,71 +1,55 @@
-import { useMutation } from "@tanstack/react-query"
-import { z } from "zod"
-import { useMemo } from "react"
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMemo } from "react";
+export interface TimeStampHook {
+  attend(date: Date): void;
 
-export interface AttendanceHook {
-  
-  success: boolean
-  error: boolean
+  leave(date: Date): void;
 }
 
-export function useAttendance(time): AttendanceHook {
-  const session = useSession()
-  const { mutate, isSuccess, isError } = useMutation(
-    async () => {
-      const response = await fetch("/api/timestamp/attendance", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ session.session?.id, time }),
-      })
+export function useTimeStamp(): TimeStampHook {
+  const queryClient = useQueryClient();
 
-      if (!response.ok) {
-        throw new Error("Attendance failed")
-      }
+  const { mutate: attend } = useMutation(async (date: Date) => {
+    const response = await fetch(`/api/timestamp`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(date),
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to attend process");
     }
-  )
+
+    // return (await response.json()) as Date
+  });
+
+  const { mutate: leave } = useMutation(async (date: Date) => {
+    const response = await fetch(`/api/timestamp`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(date),
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to leave process");
+    }
+
+    return (await response.json()) as Date;
+  });
 
   return useMemo(
     () => ({
-
-      success: isSuccess,
-      error: isError,
+      attend(date) {
+        attend(date);
+      },
+      leave(date) {
+        leave(date);
+      },
     }),
-    [isError, isSuccess, mutate]
-  )
-}
-
-export interface AttendanceHook {
-  
-  success: boolean
-  error: boolean
-}
-
-export function useLeave(time): AttendanceHook {
-  const session = useSession()
-  const { mutate, isSuccess, isError } = useMutation(
-    async () => {
-      const response = await fetch("/api/timestamp/leave", {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ session.session?.id, time }),
-      })
-
-      if (!response.ok) {
-        throw new Error("Leave failed")
-      }
-    }
-  )
-
-  return useMemo(
-    () => ({
-
-      success: isSuccess,
-      error: isError,
-    }),
-    [isError, isSuccess, mutate]
-  )
+    [attend, leave],
+  );
 }

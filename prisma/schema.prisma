@@ -8,14 +8,15 @@ generator client {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  email     String   @unique
-  firstName String   @map("first_name")
-  lastName  String   @map("last_name")
-  disabled  Boolean  @default(false)
-  owner     Boolean  @default(false)
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+  id        Int         @id @default(autoincrement())
+  email     String      @unique
+  firstName String      @map("first_name")
+  lastName  String      @map("last_name")
+  disabled  Boolean     @default(false)
+  owner     Boolean     @default(false)
+  createdAt DateTime    @default(now()) @map("created_at")
+  updatedAt DateTime    @updatedAt @map("updated_at")
+  TimeStamp TimeStamp[]
 
   @@map("users")
 }
@@ -31,4 +32,18 @@ model PendingUser {
   updatedAt DateTime @updatedAt @map("updated_at")
 
   @@map("pending_users")
+}
+
+model TimeStamp {
+  id          Int       @id @default(autoincrement())
+  user        User      @relation(fields: [userId], references: [id])
+  userId      Int       @map("user_id")
+  startTime   DateTime  @map("start_time")
+  finishTime  DateTime? @map("finish_time")
+  startPlace  String    @map("start_place")
+  finishPlace String?   @map("finish_place")
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+
+  @@map("time_stamp")
 }

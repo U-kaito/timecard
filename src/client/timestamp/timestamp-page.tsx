@@ -2,18 +2,37 @@ import { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/router";
 import { css } from "@emotion/react";
 import { useSession } from "@/client/session/session-hook";
-import { deleteCookie } from "cookies-next";
+import { useTimeStamp } from "@/client/timestamp/timestamp-hook";
 
 export function TimestampPage() {
   const { loading, session } = useSession();
+  const { attend, leave } = useTimeStamp();
+  const handleAttendButtonClick = async () => {
+    const currentTime = new Date();
+    attend(currentTime);
+  };
+  const handleLeaveButtonClick = async () => {
+    const currentTime = new Date();
+    leave(currentTime);
+  };
   return (
     <div css={TimestampPageStyles}>
       <div className="name">
         {loading ? <p>ようこそ</p> : <p>ようこそ {session?.name}様</p>}
       </div>
       <div className="button-container">
-        <button className="attendance-button green">出勤</button>
-        <button className="attendance-button red">退勤</button>
+        <button
+          className="attendance-button green"
+          onClick={handleAttendButtonClick}
+        >
+          出勤
+        </button>
+        <button
+          className="attendance-button red"
+          onClick={handleLeaveButtonClick}
+        >
+          退勤
+        </button>
       </div>
     </div>
   );

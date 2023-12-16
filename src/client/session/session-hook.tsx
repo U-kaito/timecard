@@ -55,8 +55,8 @@ export function SessionProvider({
     }
     const payload = {
       email: idToken.payload.email,
-      name: idToken.payload['custom:name'],
-      owner: idToken.payload['custom:owner'],
+      name: idToken.payload["custom:name"],
+      owner: idToken.payload["custom:owner"],
       exp: idToken.payload.exp,
     };
     setState({ loading: false, session: payload, refresh });
