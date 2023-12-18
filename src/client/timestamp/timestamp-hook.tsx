@@ -1,53 +1,59 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useMemo } from "react";
+import { TimeStampSchema } from "@/common/timestamp-schema";
+import { z } from "zod";
 export interface TimeStampHook {
-  attend(date: Date): void;
+  attend(input: z.input<typeof TimeStampSchema>): void;
 
-  leave(date: Date): void;
+  leave(input: z.input<typeof TimeStampSchema>): void;
 }
 
 export function useTimeStamp(): TimeStampHook {
   const queryClient = useQueryClient();
 
-  const { mutate: attend } = useMutation(async (date: Date) => {
-    const response = await fetch(`/api/timestamp`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(date),
-    });
+  const { mutate: attend } = useMutation(
+    async ({ input }: { input: z.input<typeof TimeStampSchema> }) => {
+      const response = await fetch(`/api/timestamp`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(input),
+      });
 
-    if (!response.ok) {
-      throw new Error("Failed to attend process");
-    }
+      if (!response.ok) {
+        throw new Error("Failed to attend process");
+      }
 
-    // return (await response.json()) as Date
-  });
+      // return (await response.json()) as Date
+    },
+  );
 
-  const { mutate: leave } = useMutation(async (date: Date) => {
-    const response = await fetch(`/api/timestamp`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(date),
-    });
+  const { mutate: leave } = useMutation(
+    async ({ input }: { input: z.input<typeof TimeStampSchema> }) => {
+      const response = await fetch(`/api/timestamp`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(input),
+      });
 
-    if (!response.ok) {
-      throw new Error("Failed to leave process");
-    }
+      if (!response.ok) {
+        throw new Error("Failed to leave process");
+      }
 
-    return (await response.json()) as Date;
-  });
+      return (await response.json()) as Date;
+    },
+  );
 
   return useMemo(
     () => ({
-      attend(date) {
-        attend(date);
+      attend(input) {
+        attend({ input });
       },
-      leave(date) {
-        leave(date);
+      leave(input) {
+        leave({ input });
       },
     }),
     [attend, leave],

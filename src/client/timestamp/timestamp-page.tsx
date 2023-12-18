@@ -4,17 +4,46 @@ import { css } from "@emotion/react";
 import { useSession } from "@/client/session/session-hook";
 import { useTimeStamp } from "@/client/timestamp/timestamp-hook";
 
+interface Location {
+  lat: number;
+  lng: number;
+}
+
 export function TimestampPage() {
   const { loading, session } = useSession();
   const { attend, leave } = useTimeStamp();
-  const handleAttendButtonClick = async () => {
-    const currentTime = new Date();
-    attend(currentTime);
+  const [coordinates, setCoordinates] = useState<Location | null>(null);
+
+  const successCallback = (position: GeolocationPosition) => {
+    const { latitude, longitude } = position.coords;
+    setCoordinates({ lat: latitude, lng: longitude });
   };
-  const handleLeaveButtonClick = async () => {
-    const currentTime = new Date();
-    leave(currentTime);
+
+  const errorCallback = (error: GeolocationPositionError) => {
+    alert("位置情報が取得できませんでした");
   };
+
+  const handleButtonClick = async (action: "attend" | "leave") => {
+    const currentTime = new Date();
+    navigator.geolocation.getCurrentPosition(successCallback, errorCallback);
+
+    if (!coordinates) {
+      alert("位置情報が取得できませんでした");
+      return;
+    }
+    if (action === "attend") {
+      attend({
+        date: currentTime.toString(),
+        ...coordinates,
+      });
+    } else {
+      leave({
+        date: currentTime.toString(),
+        ...coordinates,
+      });
+    }
+  };
+
   return (
     <div css={TimestampPageStyles}>
       <div className="name">
@@ -23,13 +52,13 @@ export function TimestampPage() {
       <div className="button-container">
         <button
           className="attendance-button green"
-          onClick={handleAttendButtonClick}
+          onClick={() => handleButtonClick("attend")}
         >
           出勤
         </button>
         <button
           className="attendance-button red"
-          onClick={handleLeaveButtonClick}
+          onClick={() => handleButtonClick("leave")}
         >
           退勤
         </button>

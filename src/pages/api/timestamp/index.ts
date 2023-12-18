@@ -3,6 +3,8 @@ import { withErrorHandler } from "@/server/error-handler";
 import { prisma } from "@/common/prisma";
 import { Session } from "@/common/session";
 import { getServerSession } from "@/server/server-session";
+import { TimeStampSchema } from "@/common/timestamp-schema";
+import { searchAddress } from "@/common/google-map";
 
 export default withErrorHandler(async (req, res) => {
   const session = await getServerSession(req);
@@ -24,9 +26,9 @@ async function postTimestamp(
   res: NextApiResponse,
   session: Session,
 ) {
-  const date: Date = req.body;
-  if (!date) {
-    res.status(400).json({ message: "Invalid body" });
+  const input = TimeStampSchema.safeParse(req.body);
+  if (!input.success) {
+    res.status(400).json({ message: "Invalid request body" });
     return;
   }
   const user = await prisma.user.findUnique({
@@ -46,11 +48,16 @@ async function postTimestamp(
     res.status(400).json({ message: "Already at work" });
     return;
   }
+  const place = await searchAddress(input.data.lat, input.data.lng)
+  if (!place){
+    res.status(400).json({ message: "Can't get address" });
+    return;
+  }
   await prisma.timeStamp.create({
     data: {
       userId: user.id,
-      startTime: date,
-      startPlace: "start",
+      startTime: input.data.date,
+      startPlace: place,
     },
   });
   res.status(200).json({ message: "OK" });
@@ -61,9 +68,9 @@ async function putTimestamp(
   res: NextApiResponse,
   session: Session,
 ) {
-  const date: Date = req.body;
-  if (!date) {
-    res.status(400).json({ message: "Invalid body" });
+  const input = TimeStampSchema.safeParse(req.body);
+  if (!input.success) {
+    res.status(400).json({ message: "Invalid request body" });
     return;
   }
   const user = await prisma.user.findUnique({
@@ -84,13 +91,18 @@ async function putTimestamp(
     res.status(400).json({ message: "Finished word" });
     return;
   }
+  const place = await searchAddress(input.data.lat, input.data.lng)
+  if (!place){
+    res.status(400).json({ message: "Can't get address" });
+    return;
+  }
   await prisma.timeStamp.update({
     where: {
       id: timestamp.id,
     },
     data: {
-      finishTime: date,
-      finishPlace: "finish",
+      finishTime: input.data.date,
+      finishPlace: place,
     },
   });
   res.status(200).json({ message: "OK" });
