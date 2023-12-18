@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { AddUserSchema } from "@/common/user-schema";
+import { EmployeeAddSchema } from "@/common/employee-schema";
 import { prisma } from "@/common/prisma";
 import { withErrorHandler } from "@/server/error-handler";
 import { signUp } from "@/common/aws-cognito";
@@ -11,16 +11,33 @@ export default withErrorHandler(async (req, res) => {
     res.status(401).json({ message: "Unauthorized" });
     return;
   }
-  if (req.method === "POST") {
-    await addUser(req, res);
-  } else {
+  if (req.method === "GET") {
+    await getEmployees(req, res);
+  } else if(req.method === "POST") {
+    await postEmployee(req, res);
+  }else  {
     res.status(405).json({ message: "Method Not Allowed" });
     return;
   }
 });
 
-export async function addUser(req: NextApiRequest, res: NextApiResponse) {
-  const result = AddUserSchema.safeParse(req.body);
+//勤務中かどうかも取りたい
+export async function getEmployees(req: NextApiRequest, res: NextApiResponse) {
+  const employee = await prisma.user.findMany({
+    select: {
+      id: true,
+      firstName: true,
+      lastName: true,
+      email: true,
+      owner: true,
+    },
+  })
+  res.status(200).json(employee);
+}
+
+
+export async function postEmployee(req: NextApiRequest, res: NextApiResponse) {
+  const result = EmployeeAddSchema.safeParse(req.body);
   if (!result.success) {
     res.status(400).json({ message: "Bad Request" });
     return;

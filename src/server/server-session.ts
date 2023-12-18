@@ -21,8 +21,8 @@ export async function getServerSession(
   }
   const data = {
     email: idToken.payload.email,
-    name: idToken.payload["custome:name"],
-    owner: idToken.payload["custome:owner"],
+    name: idToken.payload["custom:name"],
+    owner: idToken.payload["custom:owner"],
     exp: idToken.payload.exp,
   } as Session;
   if (ownerOnly && !data.owner) return null;

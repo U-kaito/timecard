@@ -29,7 +29,7 @@ export async function signUp(
 ) {
   const userAttributes = [];
   userAttributes.push(getAttribute("custom:name", name));
-  userAttributes.push(getAttribute("custome:owner", owner.toString()));
+  userAttributes.push(getAttribute("custom:owner", owner.toString()));
   await getUserPool().signUp(
     username,
     password,
