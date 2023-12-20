@@ -23,7 +23,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 
   return {
     props: {
-      key: key,
+      confirmKey: key,
       email: pendingUser.email,
       firstName: pendingUser.firstName,
       lastName: pendingUser.lastName,

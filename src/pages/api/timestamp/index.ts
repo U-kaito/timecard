@@ -48,6 +48,8 @@ async function postTimestamp(
     res.status(400).json({ message: "Already at work" });
     return;
   }
+  //timezoneを考える。
+  const date = new Date(input.data.date)
   const place = await searchAddress(input.data.lat, input.data.lng)
   if (!place){
     res.status(400).json({ message: "Can't get address" });
@@ -56,7 +58,7 @@ async function postTimestamp(
   await prisma.timeStamp.create({
     data: {
       userId: user.id,
-      startTime: input.data.date,
+      startTime: date,
       startPlace: place,
     },
   });
@@ -91,6 +93,7 @@ async function putTimestamp(
     res.status(400).json({ message: "Finished word" });
     return;
   }
+  const date = new Date(input.data.date)
   const place = await searchAddress(input.data.lat, input.data.lng)
   if (!place){
     res.status(400).json({ message: "Can't get address" });
@@ -101,7 +104,7 @@ async function putTimestamp(
       id: timestamp.id,
     },
     data: {
-      finishTime: input.data.date,
+      finishTime: date,
       finishPlace: place,
     },
   });

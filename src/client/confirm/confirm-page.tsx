@@ -8,13 +8,13 @@ import { css } from "@emotion/react";
 import { FloatLayout } from "@/client/layout/float-layout";
 
 export function ConfirmPage({
-  key,
+  confirmKey,
   email,
   firstName,
   lastName,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const [confirmCode, setconfirmCode] = useState("");
-  const { success, loading, confirm } = useConfirm(key);
+  const { success, loading, confirm } = useConfirm(confirmKey);
   const router = useRouter();
 
   useEffect(() => {

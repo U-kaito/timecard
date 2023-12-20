@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import { css } from "@emotion/react";
 import { useSession } from "@/client/session/session-hook";
 import { useTimeStamp } from "@/client/timestamp/timestamp-hook";
+import { toast } from "react-toastify"
 
 interface Location {
   lat: number;
@@ -14,33 +15,33 @@ export function TimestampPage() {
   const { attend, leave } = useTimeStamp();
   const [coordinates, setCoordinates] = useState<Location | null>(null);
 
-  const successCallback = (position: GeolocationPosition) => {
-    const { latitude, longitude } = position.coords;
-    setCoordinates({ lat: latitude, lng: longitude });
-  };
-
-  const errorCallback = (error: GeolocationPositionError) => {
-    alert("位置情報が取得できませんでした");
-  };
-
   const handleButtonClick = async (action: "attend" | "leave") => {
     const currentTime = new Date();
-    navigator.geolocation.getCurrentPosition(successCallback, errorCallback);
-
-    if (!coordinates) {
-      alert("位置情報が取得できませんでした");
-      return;
-    }
-    if (action === "attend") {
-      attend({
-        date: currentTime.toString(),
-        ...coordinates,
+    try {
+      const position = await new Promise<GeolocationPosition>((resolve, reject) => {
+        navigator.geolocation.getCurrentPosition(resolve, reject);
       });
-    } else {
-      leave({
-        date: currentTime.toString(),
-        ...coordinates,
-      });
+  
+      const { latitude, longitude } = position.coords;
+      setCoordinates({ lat: latitude, lng: longitude });
+  
+      if (action === "attend") {
+        toast("出勤しました");
+        await attend({
+          date: currentTime.toString(),
+          lat: latitude,
+          lng: longitude,
+        });
+      } else {
+        toast("退勤しました");
+        await leave({
+          date: currentTime.toString(),
+          lat: latitude,
+          lng: longitude,
+        });
+      }
+    } catch (error) {
+      toast("位置情報が取得できませんでした");
     }
   };
 

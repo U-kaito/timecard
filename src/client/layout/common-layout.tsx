@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 import { LayoutTitle } from "@/client/layout/title-component";
 import AccessTimeOutlinedIcon from "@mui/icons-material/AccessTimeOutlined";
 import BadgeOutlinedIcon from "@mui/icons-material/BadgeOutlined";
+import AssessmentOutlinedIcon from '@mui/icons-material/AssessmentOutlined';
 
 const navItems = [
   {
@@ -18,6 +19,12 @@ const navItems = [
     title: "従業員",
     icon: <BadgeOutlinedIcon />,
     ownerOnly: true,
+  },
+  {
+    href: "/check",
+    title: "出勤時間",
+    icon: <AssessmentOutlinedIcon />,
+    ownerOnly: false,
   },
 ] as NavItem[];
 
