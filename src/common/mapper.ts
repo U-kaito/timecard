@@ -8,6 +8,8 @@ export interface User {
     email: string
     firstName: string
     lastName: string
+    owner: boolean
+    work: boolean
 }
 
 export interface TimeStamp {
@@ -17,6 +19,21 @@ export interface TimeStamp {
     finishTime: Date | null
     startPlace: string
     finishPlace: string | null
+}
+
+export function mapUser(user: PrismaUser, timeStamp: PrismaTimeStamp | undefined): User{
+    let work = false
+    if(timeStamp){
+        work = true
+    }
+    return{
+        id: user.id,
+        email: user.email,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        owner: user.owner,
+        work: work,
+    }
 }
 
 export function mapTimeStamp(

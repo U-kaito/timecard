@@ -2,6 +2,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useMemo } from "react";
 import { TimeStampSchema } from "@/common/timestamp-schema";
 import { z } from "zod";
+import { User } from "@/common/mapper"
 export interface TimeStampHook {
   attend(input: z.input<typeof TimeStampSchema>): void;
 
@@ -25,7 +26,7 @@ export function useTimeStamp(): TimeStampHook {
         throw new Error("Failed to attend process");
       }
 
-      // return (await response.json()) as Date
+      return (await response.json()) as User
     },
   );
 
@@ -43,7 +44,7 @@ export function useTimeStamp(): TimeStampHook {
         throw new Error("Failed to leave process");
       }
 
-      return (await response.json()) as Date;
+      return (await response.json()) as User;
     },
   );
 

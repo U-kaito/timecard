@@ -1,13 +1,14 @@
 
 import { useMutation, useQuery } from "@tanstack/react-query"
 import { useMemo } from "react"
-import { EmployeeAddSchema, Employee } from "@/common/employee-schema"
+import { EmployeeAddSchema } from "@/common/employee-schema"
+import { User } from "@/common/mapper"
 import { z } from "zod"
 
 export interface EmployeeHook {
-  employees: (Employee)[]
+  employees: (User)[]
 
-  addEmployee(firstName: string, lastName: string, email: string, password: string, owner: boolean): Promise<Employee>
+  addEmployee(firstName: string, lastName: string, email: string, password: string, owner: boolean): void
 }
 
 export function useEmployees(): EmployeeHook {
@@ -24,7 +25,7 @@ export function useEmployees(): EmployeeHook {
         throw new Error(await response.text())
       }
 
-      return (await response.json()) as (Employee)[]
+      return (await response.json()) as (User)[]
     }
   )
 

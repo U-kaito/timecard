@@ -36,6 +36,7 @@ export function EmployeesPage() {
             </p>
             <p className="EmployeesPage-Email">{employee.email}</p>
             <p className="EmployeesPage-Misc">管理者: {employee.owner ? "はい" : "いいえ"}</p>
+            <p className="EmployeesPage-Misc">{employee.work ? "勤務中" : "勤務外"}</p>
           </div>
         ))}
       </div>

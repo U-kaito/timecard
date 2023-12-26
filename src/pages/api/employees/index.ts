@@ -4,6 +4,7 @@ import { prisma } from "@/common/prisma";
 import { withErrorHandler } from "@/server/error-handler";
 import { signUp } from "@/common/aws-cognito";
 import { getServerSession } from "@/server/server-session";
+import { mapUser } from "@/common/mapper"
 
 export default withErrorHandler(async (req, res) => {
   const session = await getServerSession(req, true);
@@ -21,18 +22,14 @@ export default withErrorHandler(async (req, res) => {
   }
 });
 
-//勤務中かどうかも取りたい
 export async function getEmployees(req: NextApiRequest, res: NextApiResponse) {
-  const employee = await prisma.user.findMany({
-    select: {
-      id: true,
-      firstName: true,
-      lastName: true,
-      email: true,
-      owner: true,
-    },
+  const users = await prisma.user.findMany()
+  const times = await prisma.timeStamp.findMany({
+    where:{
+      finishTime: null,
+    }
   })
-  res.status(200).json(employee);
+  res.status(200).json(users.map((user) => mapUser(user, times.find((time)=> time.userId === user.id))))
 }
 
 
