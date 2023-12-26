@@ -1,30 +1,41 @@
-import { useEmployees } from "@/client/employees/employee-hook"
-import { css } from "@emotion/react"
-import { Theme } from "@mui/material"
-import { EmployeeDialog } from "@/client/employees/employee-dialog-component"
-import { useEffect, useState } from "react"
+import { useEmployees } from "@/client/employees/employee-hook";
+import { css } from "@emotion/react";
+import { Theme } from "@mui/material";
+import { EmployeeDialog } from "@/client/employees/employee-dialog-component";
+import { useEffect, useState } from "react";
 
 export function EmployeesPage() {
-  const [emailSent, setEmailSent] = useState(false)
-  const { employees } = useEmployees()
-  const [dialogOpen, setDialogOpen] = useState(false)
+  const [emailSent, setEmailSent] = useState(false);
+  const { employees } = useEmployees();
+  const [dialogOpen, setDialogOpen] = useState(false);
 
   useEffect(() => {
     if (emailSent) {
       setTimeout(() => {
-        setEmailSent(false)
-      }, 3000)
+        setEmailSent(false);
+      }, 3000);
     }
-  }, [emailSent])
+  }, [emailSent]);
 
   return (
     <div css={employeesPageStyles}>
-      <EmployeeDialog open={dialogOpen} onClose={() => setDialogOpen(false)} onEmailSent={() => setEmailSent(true)} />
+      <EmployeeDialog
+        open={dialogOpen}
+        onClose={() => setDialogOpen(false)}
+        onEmailSent={() => setEmailSent(true)}
+      />
       <div className="EmployeesPage-Header">
-        <p className={`EmployeesPage-EmailLabel ${emailSent ? "EmployeesPage-EmailSent" : ""}`}>
+        <p
+          className={`EmployeesPage-EmailLabel ${
+            emailSent ? "EmployeesPage-EmailSent" : ""
+          }`}
+        >
           指定されたメールに、確認メールが送信されました!
         </p>
-        <button className="EmployeesPage-NewEmployee" onClick={() => setDialogOpen(true)}>
+        <button
+          className="EmployeesPage-NewEmployee"
+          onClick={() => setDialogOpen(true)}
+        >
           従業員を追加する
         </button>
       </div>
@@ -35,13 +46,17 @@ export function EmployeesPage() {
               {employee.lastName} {employee.firstName}
             </p>
             <p className="EmployeesPage-Email">{employee.email}</p>
-            <p className="EmployeesPage-Misc">管理者: {employee.owner ? "はい" : "いいえ"}</p>
-            <p className="EmployeesPage-Misc">{employee.work ? "勤務中" : "勤務外"}</p>
+            <p className="EmployeesPage-Misc">
+              管理者: {employee.owner ? "はい" : "いいえ"}
+            </p>
+            <p className="EmployeesPage-Misc">
+              {employee.work ? "勤務中" : "勤務外"}
+            </p>
           </div>
         ))}
       </div>
     </div>
-  )
+  );
 }
 
 function employeesPageStyles() {
@@ -50,15 +65,15 @@ function employeesPageStyles() {
       display: block;
       margin-left: auto;
       margin-right: 20px;
-      background-color: ;
-      border: 1px solid ;
+      background-color:;
+      border: 1px solid;
       padding: 5px 10px;
       border-radius: 3px;
       transition: border 0.2s ease-in-out;
       cursor: pointer;
-      color: ;
+      color:;
       &:hover {
-        background-color: ;
+        background-color:;
       }
     }
 
@@ -69,7 +84,7 @@ function employeesPageStyles() {
     }
 
     .EmployeesPage-EmailLabel {
-      color: ;
+      color:;
       opacity: 0;
       margin: 0;
       transition: opacity 0.2s ease-in-out;
@@ -98,12 +113,12 @@ function employeesPageStyles() {
     }
 
     .EmployeesPage-Name {
-      font-size: ;
+      font-size:;
       margin: 0;
     }
 
     .EmployeesPage-Email {
-      color: ;
+      color:;
       font-size: 0.9rem;
       margin-top: 0;
       margin-bottom: 10px;
@@ -113,5 +128,5 @@ function employeesPageStyles() {
       font-size: 0.9rem;
       margin: 0;
     }
-  `
+  `;
 }

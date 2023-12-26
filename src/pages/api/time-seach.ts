@@ -37,23 +37,22 @@ async function postTimeSeach(
     return;
   }
   const startDate = new Date(input.data.year, input.data.month - 1, 1);
-  let endDate: Date
-  if(input.data.month == 12){
-    endDate = new Date(input.data.year + 1, 0, 0)
-  }else{
-    endDate = new Date(input.data.year, input.data.month, 1)
+  let endDate: Date;
+  if (input.data.month == 12) {
+    endDate = new Date(input.data.year + 1, 0, 0);
+  } else {
+    endDate = new Date(input.data.year, input.data.month, 1);
   }
 
   const times = await prisma.timeStamp.findMany({
-    where:{
-        userId: user.id,
-        startTime: {
-            gte: startDate,
-            lt: endDate,
-          }
-    }
-  })
-  
+    where: {
+      userId: user.id,
+      startTime: {
+        gte: startDate,
+        lt: endDate,
+      },
+    },
+  });
+
   res.status(200).json(times.map((time) => mapTimeStamp(time)));
 }
-

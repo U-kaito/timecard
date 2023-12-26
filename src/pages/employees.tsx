@@ -1,3 +1,3 @@
-import { EmployeesPage } from "@/client/employees/employees-page"
+import { EmployeesPage } from "@/client/employees/employees-page";
 
-export default EmployeesPage
+export default EmployeesPage;

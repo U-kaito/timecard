@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { css } from "@emotion/react";
 import { useSession } from "@/client/session/session-hook";
 import { useTimeStamp } from "@/client/timestamp/timestamp-hook";
-import { toast } from "react-toastify"
+import { toast } from "react-toastify";
 
 interface Location {
   lat: number;
@@ -18,13 +18,15 @@ export function TimestampPage() {
   const handleButtonClick = async (action: "attend" | "leave") => {
     const currentTime = new Date();
     try {
-      const position = await new Promise<GeolocationPosition>((resolve, reject) => {
-        navigator.geolocation.getCurrentPosition(resolve, reject);
-      });
-  
+      const position = await new Promise<GeolocationPosition>(
+        (resolve, reject) => {
+          navigator.geolocation.getCurrentPosition(resolve, reject);
+        },
+      );
+
       const { latitude, longitude } = position.coords;
       setCoordinates({ lat: latitude, lng: longitude });
-  
+
       if (action === "attend") {
         toast("出勤しました");
         await attend({

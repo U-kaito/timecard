@@ -4,7 +4,7 @@ import { prisma } from "@/common/prisma";
 import { withErrorHandler } from "@/server/error-handler";
 import { signUp } from "@/common/aws-cognito";
 import { getServerSession } from "@/server/server-session";
-import { mapUser } from "@/common/mapper"
+import { mapUser } from "@/common/mapper";
 
 export default withErrorHandler(async (req, res) => {
   const session = await getServerSession(req, true);
@@ -14,24 +14,30 @@ export default withErrorHandler(async (req, res) => {
   }
   if (req.method === "GET") {
     await getEmployees(req, res);
-  } else if(req.method === "POST") {
+  } else if (req.method === "POST") {
     await postEmployee(req, res);
-  }else  {
+  } else {
     res.status(405).json({ message: "Method Not Allowed" });
     return;
   }
 });
 
 export async function getEmployees(req: NextApiRequest, res: NextApiResponse) {
-  const users = await prisma.user.findMany()
+  const users = await prisma.user.findMany();
   const times = await prisma.timeStamp.findMany({
-    where:{
+    where: {
       finishTime: null,
-    }
-  })
-  res.status(200).json(users.map((user) => mapUser(user, times.find((time)=> time.userId === user.id))))
+    },
+  });
+  res.status(200).json(
+    users.map((user) =>
+      mapUser(
+        user,
+        times.find((time) => time.userId === user.id),
+      ),
+    ),
+  );
 }
-
 
 export async function postEmployee(req: NextApiRequest, res: NextApiResponse) {
   const result = EmployeeAddSchema.safeParse(req.body);

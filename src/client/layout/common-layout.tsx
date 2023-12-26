@@ -5,7 +5,7 @@ import { useRouter } from "next/router";
 import { LayoutTitle } from "@/client/layout/title-component";
 import AccessTimeOutlinedIcon from "@mui/icons-material/AccessTimeOutlined";
 import BadgeOutlinedIcon from "@mui/icons-material/BadgeOutlined";
-import AssessmentOutlinedIcon from '@mui/icons-material/AssessmentOutlined';
+import AssessmentOutlinedIcon from "@mui/icons-material/AssessmentOutlined";
 
 const navItems = [
   {

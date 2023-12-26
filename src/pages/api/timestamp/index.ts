@@ -49,9 +49,9 @@ async function postTimestamp(
     return;
   }
   //timezoneを考える。
-  const date = new Date(input.data.date)
-  const place = await searchAddress(input.data.lat, input.data.lng)
-  if (!place){
+  const date = new Date(input.data.date);
+  const place = await searchAddress(input.data.lat, input.data.lng);
+  if (!place) {
     res.status(400).json({ message: "Can't get address" });
     return;
   }
@@ -93,9 +93,9 @@ async function putTimestamp(
     res.status(400).json({ message: "Finished word" });
     return;
   }
-  const date = new Date(input.data.date)
-  const place = await searchAddress(input.data.lat, input.data.lng)
-  if (!place){
+  const date = new Date(input.data.date);
+  const place = await searchAddress(input.data.lat, input.data.lng);
+  if (!place) {
     res.status(400).json({ message: "Can't get address" });
     return;
   }

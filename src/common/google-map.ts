@@ -14,8 +14,8 @@ export async function searchAddress(lat: number, lng: number) {
 
     const formattedAddress = response.data.results[0].formatted_address;
     const parts = formattedAddress.split("、");
-    const addressAfterComma = parts[1] ? parts[1].trim() : '';
-    return addressAfterComma
+    const addressAfterComma = parts[1] ? parts[1].trim() : "";
+    return addressAfterComma;
   } catch (error) {
     console.log(error);
     alert("位置情報が入手できませんでした。");
