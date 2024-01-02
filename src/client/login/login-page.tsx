@@ -50,7 +50,7 @@ LoginPage.Layout = FloatLayout;
 
 function loginPageStyles(error: boolean) {
   return css`
-    background-color:;
+    background-color: #fff;
     filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.2));
     width: 350px;
     border-radius: 10px;
@@ -60,7 +60,7 @@ function loginPageStyles(error: boolean) {
     gap: 25px;
 
     .LoginPage-Button {
-      border: 1px solid;
+      border: 1px solid ${error ? '#d32f2f' : '#1976d2'};
       border-radius: 5px;
       background: transparent;
       padding: 10px 20px;
@@ -74,12 +74,12 @@ function loginPageStyles(error: boolean) {
       }
 
       &:hover {
-        border: 1px solid;
-        background-color:;
-        color:;
+        border: 1px solid #42a5f5;
+        background-color: #42a5f5;
+        color: #fff;
 
         .LoginPage-Progress {
-          color:;
+          color: #fff;
         }
       }
     }
